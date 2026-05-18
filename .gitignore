@@ -1,0 +1,25 @@
+# Environments
+venv/
+env/
+.env
+
+# Dependencies
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Uploads and Media
+uploads/
+backend/uploads/
+demo_website/uploads/
+
+# Build and Temp
+build/
+dist/
+.DS_Store
+
+# Executables
+ngrok.exe

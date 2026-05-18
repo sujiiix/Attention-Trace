@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusTech | The Future of Electronics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        @keyframes adSlideIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        @keyframes backdropFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .ad-overlay-backdrop { animation: backdropFadeIn 0.4s ease-out; }
+        .ad-overlay-modal { animation: adSlideIn 0.4s ease-out; }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-zinc-200 px-8 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer">
+                <div class="w-8 h-8 bg-zinc-900 rounded flex items-center justify-center">
+                    <span class="text-white font-black text-sm">NT</span>
+                </div>
+                <span class="text-xl font-black tracking-tight">NexusTech.</span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-semibold text-sm text-zinc-500">
+                <a href="#" class="text-zinc-900 hover:text-zinc-600 transition-colors">Mac</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">iPad</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">iPhone</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">Watch</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">Audio</a>
+            </div>
+            <div class="flex space-x-4">
+                <svg class="w-6 h-6 text-zinc-900 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <svg class="w-6 h-6 text-zinc-900 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-zinc-900 text-white overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=2070&auto=format&fit=crop" alt="Hero Background" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-8 py-32 md:py-48 flex flex-col items-center text-center">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-6">Pro. Beyond.</h1>
+            <p class="text-xl md:text-2xl text-zinc-300 mb-10 max-w-2xl font-light">The new NexusBook Pro with M-Class architecture. Mind-blowing performance meets incredible battery life.</p>
+            <div class="flex space-x-4">
+                <button class="bg-white text-zinc-900 px-8 py-4 rounded-full font-bold hover:bg-zinc-200 transition-colors">Buy Now</button>
+                <button class="bg-transparent border border-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors">Learn More</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Grid -->
+    <section class="max-w-7xl mx-auto px-8 py-20">
+        <h2 class="text-3xl font-black text-center mb-12">Latest Innovations</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-zinc-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-2">NexusPhone 15</h3>
+                <p class="text-zinc-500 mb-6">Titanium. So strong. So light.</p>
+                <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=2070&auto=format&fit=crop" alt="Phone" class="w-full h-64 object-cover rounded-xl mb-6">
+                <p class="font-semibold text-lg">From $999</p>
+                <button class="mt-4 text-blue-600 font-bold hover:underline">Buy ></button>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-zinc-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-2">NexusWatch Ultra</h3>
+                <p class="text-zinc-500 mb-6">Next level adventure.</p>
+                <img src="https://images.unsplash.com/photo-1617043786394-f977fa12eddf?q=80&w=2070&auto=format&fit=crop" alt="Watch" class="w-full h-64 object-cover rounded-xl mb-6">
+                <p class="font-semibold text-lg">From $799</p>
+                <button class="mt-4 text-blue-600 font-bold hover:underline">Buy ></button>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-zinc-100 hover:shadow-xl transition-shadow cursor-pointer flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-2">NexusPods Pro</h3>
+                <p class="text-zinc-500 mb-6">Magic has never sounded better.</p>
+                <img src="https://images.unsplash.com/photo-1606220588913-b3aec4eb68b1?q=80&w=2070&auto=format&fit=crop" alt="Earbuds" class="w-full h-64 object-cover rounded-xl mb-6">
+                <p class="font-semibold text-lg">From $249</p>
+                <button class="mt-4 text-blue-600 font-bold hover:underline">Buy ></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-100 py-12 text-center text-zinc-500 text-sm border-t border-zinc-200">
+        <p>Copyright &copy; 2026 NexusTech Inc. All rights reserved.</p>
+        <p class="mt-2">This is a dummy website created for testing the Attention Trace intelligence platform.</p>
+    </footer>
+
+    <!-- ATTENTION TRACE AD INJECTION SCRIPT -->
+    <script>
+        const AT_API = 'http://localhost:8000';
+        let atWebcamStream = null, atWebSocket = null, atFrameInterval = null, atCurrentCampaign = null;
+
+        // ---- Session tracking data ----
+        let atSessionStart = 0;
+        let atClicks = 0;
+        let atHeatmap = [];
+        let atEmotionTimeline = [];   // per-second emotion data
+        let atGazeTimeline = [];      // per-second gaze data
+        let atLastEmotion = 'neutral';
+        let atFaceDetectedCount = 0;
+        let atFrameCount = 0;
+        let atGazeOnAdCount = 0;
+        let atLastMousePos = null;
+        let atMouseVelocities = [];
+        let atIdleTimer = null;
+        let atIdleTime = 0;
+        let atIdleStart = 0;
+        let atIsIdle = false;
+        let atTabHiddenTime = 0;
+        let atTabHiddenStart = 0;
+        let atHoverZones = {};       // 4x4 grid: time per zone
+        let atLastSecond = -1;
+
+        // Tab visibility tracking
+        document.addEventListener('visibilitychange', () => {
+            if (atSessionStart === 0) return;
+            if (document.hidden) {
+                atTabHiddenStart = Date.now();
+            } else if (atTabHiddenStart > 0) {
+                atTabHiddenTime += (Date.now() - atTabHiddenStart) / 1000;
+                atTabHiddenStart = 0;
+            }
+        });
+
+        async function loadAttentionTraceAd() {
+            if (new URLSearchParams(window.location.search).has('simulator')) return;
+            try {
+                const res = await fetch(`${AT_API}/api/campaigns/active`);
+                if (!res.ok) return;
+                const campaigns = await res.json();
+                if (!campaigns || campaigns.length === 0) return;
+                atCurrentCampaign = campaigns.find(c => c.website_url.includes('localhost:8080')) || campaigns[campaigns.length - 1];
+                setTimeout(() => showAdOverlay(atCurrentCampaign), 3000);
+            } catch (e) { console.log('Attention Trace: backend unavailable.'); }
+        }
+
+        function scheduleNextAd() {
+            setTimeout(() => { if (atCurrentCampaign) showAdOverlay(atCurrentCampaign); }, 180000);
+        }
+
+        function resetIdleTimer() {
+            if (atIsIdle) { atIdleTime += (Date.now() - atIdleStart) / 1000; atIsIdle = false; }
+            clearTimeout(atIdleTimer);
+            atIdleTimer = setTimeout(() => { atIsIdle = true; atIdleStart = Date.now(); }, 3000);
+        }
+
+        function startTracking() {
+            const video = document.createElement('video');
+            video.autoplay = true; video.playsInline = true; video.muted = true;
+            video.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;';
+            document.body.appendChild(video);
+            const canvas = document.createElement('canvas');
+            canvas.width = 320; canvas.height = 240; canvas.style.display = 'none';
+            document.body.appendChild(canvas);
+
+            try {
+                atWebSocket = new WebSocket('ws://localhost:8000/ws/emotion');
+                atWebSocket.onmessage = (evt) => {
+                    try {
+                        const data = JSON.parse(evt.data);
+                        atFrameCount++;
+                        if (data.face_detected) atFaceDetectedCount++;
+                        if (data.on_ad) atGazeOnAdCount++;
+                        atLastEmotion = data.emotion || 'neutral';
+
+                        // Build per-second timeline
+                        const sec = Math.floor((Date.now() - atSessionStart) / 1000);
+                        if (sec !== atLastSecond) {
+                            atLastSecond = sec;
+                            atEmotionTimeline.push({ second: sec, emotion: data.emotion, scores: data.emotion_scores || {} });
+                            atGazeTimeline.push({ second: sec, gaze_x: data.gaze_x, gaze_y: data.gaze_y, on_ad: data.on_ad, face_detected: data.face_detected });
+                        }
+
+                        // Emotion data is collected but not shown on-site as per requirements
+                    } catch (e) {
+                        // Legacy fallback: plain text response
+                        atLastEmotion = evt.data;
+                    }
+                };
+            } catch(e) {}
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    atWebcamStream = stream; video.srcObject = stream;
+                    atFrameInterval = setInterval(() => {
+                        if (atWebSocket && atWebSocket.readyState === WebSocket.OPEN) {
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(video, 0, 0, 320, 240);
+                            atWebSocket.send(canvas.toDataURL('image/jpeg', 0.5));
+                        }
+                    }, 500);
+                }).catch(() => {});
+        }
+
+        function stopTracking() {
+            if (atIsIdle) { atIdleTime += (Date.now() - atIdleStart) / 1000; atIsIdle = false; }
+            clearTimeout(atIdleTimer);
+            if (atFrameInterval) { clearInterval(atFrameInterval); atFrameInterval = null; }
+            if (atWebSocket) { atWebSocket.close(); atWebSocket = null; }
+            if (atWebcamStream) { atWebcamStream.getTracks().forEach(t => t.stop()); atWebcamStream = null; }
+        }
+
+        function getDominantEmotion() {
+            if (atEmotionTimeline.length === 0) return atLastEmotion || 'neutral';
+            const counts = {};
+            atEmotionTimeline.forEach(e => { const em = e.emotion || 'neutral'; counts[em] = (counts[em] || 0) + 1; });
+            return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+        }
+
+        async function saveSession(campaignId) {
+            const timeSpent = (Date.now() - atSessionStart) / 1000;
+            const avgEmotion = getDominantEmotion();
+            const faceDetectedPct = atFrameCount > 0 ? (atFaceDetectedCount / atFrameCount) * 100 : 0;
+            const gazeOnAdPct = atFrameCount > 0 ? (atGazeOnAdCount / atFrameCount) * 100 : 0;
+            const avgVelocity = atMouseVelocities.length > 0 ? atMouseVelocities.reduce((a, b) => a + b) / atMouseVelocities.length : 0;
+            const activeTime = Math.max(0, timeSpent - atIdleTime - atTabHiddenTime);
+
+            try {
+                await fetch(`${AT_API}/api/sessions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        campaign_id: campaignId,
+                        time_spent: parseFloat(timeSpent.toFixed(2)),
+                        clicks: atClicks,
+                        avg_emotion: avgEmotion,
+                        heatmap_data: JSON.stringify(atHeatmap),
+                        emotion_timeline: atEmotionTimeline,
+                        gaze_timeline: atGazeTimeline,
+                        hover_zones: atHoverZones,
+                        mouse_velocity_avg: parseFloat(avgVelocity.toFixed(2)),
+                        idle_time: parseFloat(atIdleTime.toFixed(2)),
+                        active_time: parseFloat(activeTime.toFixed(2)),
+                        tab_hidden_time: parseFloat(atTabHiddenTime.toFixed(2)),
+                        face_detected_pct: parseFloat(faceDetectedPct.toFixed(1)),
+                        gaze_on_ad_pct: parseFloat(gazeOnAdPct.toFixed(1))
+                    })
+                });
+                console.log(`Attention Trace: Session saved (${timeSpent.toFixed(1)}s, face:${faceDetectedPct.toFixed(0)}%, gaze:${gazeOnAdPct.toFixed(0)}%, emotion:${avgEmotion})`);
+            } catch (e) {
+                console.log('Attention Trace: Failed to save session');
+            }
+        }
+
+        function closeAd(backdrop, modal) {
+            if (atCurrentCampaign) saveSession(atCurrentCampaign.id);
+            stopTracking();
+            backdrop.remove();
+            modal.remove();
+            // Reset everything for next cycle
+            atClicks = 0; atHeatmap = []; atEmotionTimeline = []; atGazeTimeline = [];
+            atFaceDetectedCount = 0; atFrameCount = 0; atGazeOnAdCount = 0;
+            atMouseVelocities = []; atIdleTime = 0; atTabHiddenTime = 0;
+            atHoverZones = {}; atLastSecond = -1; atLastMousePos = null;
+            atLastEmotion = 'neutral';
+            scheduleNextAd();
+        }
+
+        function showAdOverlay(campaign) {
+            // Reset session data
+            atSessionStart = Date.now();
+            atClicks = 0; atHeatmap = []; atEmotionTimeline = []; atGazeTimeline = [];
+            atFaceDetectedCount = 0; atFrameCount = 0; atGazeOnAdCount = 0;
+            atMouseVelocities = []; atIdleTime = 0; atTabHiddenTime = 0;
+            atHoverZones = {}; atLastSecond = -1; atLastMousePos = null;
+
+            const backdrop = document.createElement('div');
+            backdrop.className = 'ad-overlay-backdrop';
+            backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;';
+
+            const modal = document.createElement('div');
+            modal.className = 'ad-overlay-modal';
+            modal.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:white;border-radius:16px;padding:16px;box-shadow:0 25px 60px rgba(0,0,0,0.4);max-width:600px;width:90%;';
+
+            // Track clicks
+            modal.addEventListener('click', () => { atClicks++; resetIdleTimer(); });
+
+            // Track mouse movement: position, velocity, hover zones, idle
+            modal.addEventListener('mousemove', (e) => {
+                resetIdleTimer();
+                const now = Date.now();
+                const rect = modal.getBoundingClientRect();
+                const relX = e.clientX - rect.left;
+                const relY = e.clientY - rect.top;
+
+                atHeatmap.push({ x: relX, y: relY, t: now - atSessionStart });
+
+                // Mouse velocity
+                if (atLastMousePos) {
+                    const dt = (now - atLastMousePos.t) / 1000;
+                    if (dt > 0) {
+                        const dx = e.clientX - atLastMousePos.x;
+                        const dy = e.clientY - atLastMousePos.y;
+                        const vel = Math.sqrt(dx * dx + dy * dy) / dt;
+                        atMouseVelocities.push(vel);
+                    }
+                }
+                atLastMousePos = { x: e.clientX, y: e.clientY, t: now };
+
+                // Hover zones (4x4 grid)
+                const zoneX = Math.min(3, Math.floor((relX / rect.width) * 4));
+                const zoneY = Math.min(3, Math.floor((relY / rect.height) * 4));
+                const zoneKey = `${zoneX}_${zoneY}`;
+                atHoverZones[zoneKey] = (atHoverZones[zoneKey] || 0) + 1;
+            });
+
+            const label = document.createElement('div');
+            label.style.cssText = 'margin-bottom:10px;';
+            label.innerHTML = '<span style="font-size:11px;font-weight:700;color:#999;letter-spacing:2px;text-transform:uppercase;">Sponsored Ad</span>';
+
+            const link = document.createElement('a');
+            link.href = campaign.click_url || '#';
+            link.target = '_blank'; link.rel = 'noopener noreferrer';
+            link.style.cssText = 'display:block;cursor:pointer;';
+
+            let media;
+            if (campaign.media_type === 'video') {
+                media = document.createElement('video');
+                media.src = campaign.media_url;
+                media.autoplay = true; media.loop = true; media.muted = true; media.playsInline = true;
+            } else {
+                media = document.createElement('img');
+                media.src = campaign.media_url; media.alt = 'Advertisement';
+            }
+            media.style.cssText = 'width:100%;height:auto;border-radius:12px;display:block;transition:opacity 0.2s;';
+            media.onmouseenter = () => media.style.opacity = '0.85';
+            media.onmouseleave = () => media.style.opacity = '1';
+            link.appendChild(media);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.innerText = 'Dismiss';
+            closeBtn.style.cssText = 'display:none;margin-top:12px;width:100%;padding:10px;border:none;background:#ef4444;color:white;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;transition:background 0.2s;';
+            closeBtn.onmouseenter = () => closeBtn.style.background = '#dc2626';
+            closeBtn.onmouseleave = () => closeBtn.style.background = '#ef4444';
+            closeBtn.onclick = () => closeAd(backdrop, modal);
+            setTimeout(() => { closeBtn.style.display = 'block'; }, 10000);
+
+            const info = document.createElement('div');
+            info.style.cssText = 'margin-top:10px; text-align:center;';
+            info.innerHTML = `<p style="margin:0; font-size:14px; font-weight:700; color:#333;">${campaign.ad_name || 'Campaign'}</p>
+                             <p style="margin:2px 0 0; font-size:11px; color:#666;">${campaign.website_url}</p>`;
+
+            modal.appendChild(label); modal.appendChild(link); modal.appendChild(info); modal.appendChild(closeBtn);
+            document.body.appendChild(backdrop); document.body.appendChild(modal);
+            startTracking();
+        }
+
+        window.addEventListener('DOMContentLoaded', loadAttentionTraceAd);
+    </script>
+</body>
+</html>
