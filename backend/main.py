@@ -314,7 +314,8 @@ def get_subscription_pricing():
     """Public: returns current subscription pricing."""
     price = db.get_global_setting("subscription_price", 500.0)
     campaign_limit_free = db.get_global_setting("free_campaign_limit", 1)
-    return {"price": price, "free_campaign_limit": campaign_limit_free, "currency": "INR", "period": "month"}
+    pro_campaign_limit = db.get_global_setting("pro_campaign_limit", 20)
+    return {"price": price, "free_campaign_limit": campaign_limit_free, "pro_campaign_limit": pro_campaign_limit, "currency": "INR", "period": "month"}
 
 @app.get("/api/subscription/status")
 def get_subscription_status(current_user_id: str = Depends(get_current_user)):
@@ -324,6 +325,14 @@ def get_subscription_status(current_user_id: str = Depends(get_current_user)):
     is_active = db.check_subscription_active(current_user_id)
     campaign_count = db.get_user_campaign_count(current_user_id)
     free_limit = db.get_global_setting("free_campaign_limit", 1)
+    pro_limit = db.get_global_setting("pro_campaign_limit", 20)
+    is_admin = user.get("role") == "admin"
+    if is_admin:
+        can_create = True
+    elif is_active:
+        can_create = campaign_count < pro_limit
+    else:
+        can_create = campaign_count < free_limit
     return {
         "is_subscribed": is_active,
         "status": user.get("subscription_status", "none"),
@@ -331,7 +340,8 @@ def get_subscription_status(current_user_id: str = Depends(get_current_user)):
         "expiry": str(user.get("subscription_expiry", "")) if user.get("subscription_expiry") else None,
         "campaign_count": campaign_count,
         "free_campaign_limit": free_limit,
-        "can_create_campaign": is_active or campaign_count < free_limit or user.get("role") == "admin"
+        "pro_campaign_limit": pro_limit,
+        "can_create_campaign": can_create
     }
 
 @app.post("/api/subscription/activate")
@@ -381,6 +391,27 @@ def cancel_subscription(current_user_id: str = Depends(get_current_user)):
     db.cancel_user_subscription(current_user_id)
     return {"message": "Subscription cancelled."}
 
+@app.post("/api/subscription/renew")
+def renew_subscription(req: SubscriptionRequest, current_user_id: str = Depends(get_current_user)):
+    """Renew an active or expired subscription with a new payment."""
+    user = db.get_user_by_id(current_user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    status = user.get("subscription_status", "none")
+    if status not in ("active", "expired", "cancelled"):
+        raise HTTPException(status_code=400, detail="No previous subscription found to renew.")
+    price = db.get_global_setting("subscription_price", 500.0)
+    db.create_payment_record(
+        user_id=current_user_id,
+        plan=req.plan,
+        amount=price,
+        transaction_id=req.transaction_id,
+        billing_name=req.billing_name,
+        billing_address=req.billing_address,
+        billing_phone=req.billing_phone
+    )
+    return {"message": "Renewal payment submitted. Waiting for admin verification."}
+
 class SubscriptionPricingUpdate(BaseModel):
     price: float
     free_campaign_limit: int = 1
@@ -416,9 +447,14 @@ async def create_campaign(
     if not is_admin:
         campaign_count = db.get_user_campaign_count(current_user_id)
         free_limit = db.get_global_setting("free_campaign_limit", 1)
+        pro_limit = db.get_global_setting("pro_campaign_limit", 20)
         is_subscribed = db.check_subscription_active(current_user_id)
-        if campaign_count >= free_limit and not is_subscribed:
-            raise HTTPException(status_code=403, detail="Campaign limit reached. Please subscribe to create more campaigns.")
+        if is_subscribed:
+            if campaign_count >= pro_limit:
+                raise HTTPException(status_code=403, detail=f"Pro plan allows up to {pro_limit} campaigns. You have reached the limit.")
+        else:
+            if campaign_count >= free_limit:
+                raise HTTPException(status_code=403, detail="Campaign limit reached. Please subscribe to create more campaigns.")
 
     file_ext = file.filename.split('.')[-1]
     filename = f"media_{current_user_id}_{int(time.time())}.{file_ext}"

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Users, TrendingUp, Zap, Activity, Crown, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { useToast } from '../components/Toast';
+import { API_BASE_URL } from '../config';
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function AdminPanel() {
 
   const fetchPayments = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/admin/payments', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/payments`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (res.ok) setPendingPayments(await res.json());
@@ -35,11 +36,11 @@ export default function AdminPanel() {
 
     // Verify admin role and load data
     Promise.all([
-      fetch('http://localhost:8000/api/users/me', {
+      fetch(`${API_BASE_URL}/api/users/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).then(r => r.json()),
-      fetch('http://localhost:8000/api/settings/public_url').then(r => r.json()),
-      fetch('http://localhost:8000/api/subscription/pricing').then(r => r.json())
+      fetch(`${API_BASE_URL}/api/settings/public_url`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/subscription/pricing`).then(r => r.json())
     ])
     .then(([userData, settingsData, pricingData]) => {
       if (userData.role !== 'admin') {
@@ -47,12 +48,12 @@ export default function AdminPanel() {
         return;
       }
       setIsAdmin(true);
-      setPublicApiUrl(settingsData.public_api_url || 'http://localhost:8000');
+      setPublicApiUrl(settingsData.public_api_url || API_BASE_URL);
       setSubPrice(pricingData.price || 5);
       setFreeCampaignLimit(pricingData.free_campaign_limit || 1);
       
       // Load stats
-      return fetch('http://localhost:8000/api/admin/stats', {
+      return fetch(`${API_BASE_URL}/api/admin/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).then(r => r.json());
     })
@@ -69,7 +70,7 @@ export default function AdminPanel() {
 
   const handleApprovePayment = async (paymentId) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/admin/payments/${paymentId}/approve`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/payments/${paymentId}/approve`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
@@ -87,7 +88,7 @@ export default function AdminPanel() {
 
   const handleRejectPayment = async (paymentId) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/admin/payments/${paymentId}/reject`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/payments/${paymentId}/reject`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
@@ -104,7 +105,7 @@ export default function AdminPanel() {
 
   const handleSaveSettings = () => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8000/api/settings/public_url', {
+    fetch(`${API_BASE_URL}/api/settings/public_url`, {
       method: 'POST',
       headers: { 
         'Authorization': `Bearer ${token}`,
@@ -126,7 +127,7 @@ export default function AdminPanel() {
 
   const handleSavePricing = () => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8000/api/admin/subscription-pricing', {
+    fetch(`${API_BASE_URL}/api/admin/subscription-pricing`, {
       method: 'POST',
       headers: { 
         'Authorization': `Bearer ${token}`,

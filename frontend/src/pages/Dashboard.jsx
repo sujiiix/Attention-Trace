@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, LineChart, Line, XAxis, YAxis, CartesianGrid, AreaChart, Area, BarChart, Bar, Legend } from 'recharts';
 import { useToast } from '../components/Toast';
 import { BarChart3, Zap, Database } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 function CampaignSetup() {
   const [websiteUrl, setWebsiteUrl] = useState('');
@@ -11,12 +12,12 @@ function CampaignSetup() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
-  const [publicApiUrl, setPublicApiUrl] = useState('http://localhost:8000');
+  const [publicApiUrl, setPublicApiUrl] = useState(API_BASE_URL);
   const navigate = useNavigate();
   const toast = useToast();
 
   const fetchCampaigns = () => {
-    fetch(`http://localhost:8000/api/campaigns/me`, {
+    fetch(`${API_BASE_URL}/api/campaigns/me`, {
       headers: { 
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'ngrok-skip-browser-warning': 'true'
@@ -30,7 +31,7 @@ function CampaignSetup() {
 
   useEffect(() => { 
     fetchCampaigns(); 
-    fetch('http://localhost:8000/api/settings/public_url')
+    fetch(`${API_BASE_URL}/api/settings/public_url`)
       .then(r => r.json())
       .then(data => setPublicApiUrl(data.public_api_url))
       .catch(console.error);
@@ -49,7 +50,7 @@ function CampaignSetup() {
     formData.append('click_url', clickUrl);
 
     try {
-      const apiBase = 'http://localhost:8000';
+      const apiBase = API_BASE_URL;
       const token = localStorage.getItem('token');
       
       const res = await fetch(`${apiBase}/api/campaigns`, {
@@ -207,9 +208,9 @@ function CampaignSetup() {
                 <div className="flex items-center space-x-4 overflow-hidden">
                   <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden flex-shrink-0">
                     {c.ad_media && c.ad_media.match(/\.(mp4|webm|ogg|mov)$/i) ? (
-                      <video src={`http://localhost:8000/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-70" />
+                      <video src={`${API_BASE_URL}/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-70" />
                     ) : (
-                      <img src={`http://localhost:8000/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-70" alt="ad" />
+                      <img src={`${API_BASE_URL}/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-70" alt="ad" />
                     )}
                   </div>
                   <div className="truncate">
@@ -267,7 +268,7 @@ function Analytics() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/campaigns/me', {
+    fetch(`${API_BASE_URL}/api/campaigns/me`, {
       headers: { 
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'ngrok-skip-browser-warning': 'true'
@@ -283,7 +284,7 @@ function Analytics() {
   const handleSelectCampaign = (id) => {
     setSelectedCampaign(id);
     setLoading(true);
-    fetch(`${localStorage.getItem('public_api_url') || 'http://localhost:8000'}/api/analytics/${id}`, {
+    fetch(`${localStorage.getItem('public_api_url') || API_BASE_URL}/api/analytics/${id}`, {
       headers: { 
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'ngrok-skip-browser-warning': 'true'
@@ -361,7 +362,7 @@ function Analytics() {
                   className="bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/50 text-blue-400 px-5 py-2 rounded-xl text-sm font-bold transition-all">
                   ▶ TEST AD
                 </button>
-                <a href={`http://localhost:8000/api/analytics/${selectedCampaign}/report?token=${localStorage.getItem('token')}`}
+                <a href={`${API_BASE_URL}/api/analytics/${selectedCampaign}/report?token=${localStorage.getItem('token')}`}
                   target="_blank" rel="noopener noreferrer"
                   className="bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/50 text-purple-400 px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
                   <BarChart3 className="w-4 h-4" /> 📥 DOWNLOAD FULL REPORT
@@ -512,7 +513,7 @@ function CampaignHistory() {
   const toast = useToast();
 
   const fetchCampaigns = () => {
-    fetch(`${localStorage.getItem('public_api_url') || 'http://localhost:8000'}/api/campaigns/me`, {
+    fetch(`${localStorage.getItem('public_api_url') || API_BASE_URL}/api/campaigns/me`, {
       headers: { 
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'ngrok-skip-browser-warning': 'true'
@@ -530,7 +531,7 @@ function CampaignHistory() {
     if (!window.confirm('Are you sure? This will permanently delete this campaign and all its analytics data.')) return;
     setDeleting(id);
     try {
-      const apiBase = localStorage.getItem('public_api_url') || 'http://localhost:8000';
+      const apiBase = localStorage.getItem('public_api_url') || API_BASE_URL;
       const res = await fetch(`${apiBase}/api/campaigns/${id}`, {
         method: 'DELETE',
         headers: { 
@@ -580,9 +581,9 @@ function CampaignHistory() {
               <div className="flex flex-col h-full relative z-10">
                 <div className="w-full h-40 bg-gray-900 rounded-xl overflow-hidden mb-6 border border-gray-800">
                   {c.ad_media && c.ad_media.match(/\.(mp4|webm|ogg|mov)$/i) ? (
-                    <video src={`http://localhost:8000/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-80" autoPlay loop muted playsInline />
+                    <video src={`${API_BASE_URL}/${c.ad_media.replaceAll('\\','/')}`} className="w-full h-full object-cover opacity-80" autoPlay loop muted playsInline />
                   ) : (
-                    <img src={`http://localhost:8000/${c.ad_media ? c.ad_media.replaceAll('\\','/') : ''}`} className="w-full h-full object-cover opacity-80" alt="ad" />
+                    <img src={`${API_BASE_URL}/${c.ad_media ? c.ad_media.replaceAll('\\','/') : ''}`} className="w-full h-full object-cover opacity-80" alt="ad" />
                   )}
                 </div>
 
@@ -599,7 +600,7 @@ function CampaignHistory() {
                     className="flex-grow text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                     View Analytics →
                   </button>
-                  <a href={`${localStorage.getItem('public_api_url') || 'http://localhost:8000'}/api/analytics/${c.id}/report?token=${localStorage.getItem('token')}`}
+                  <a href={`${localStorage.getItem('public_api_url') || API_BASE_URL}/api/analytics/${c.id}/report?token=${localStorage.getItem('token')}`}
                     target="_blank" rel="noopener noreferrer"
                     className="bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 border border-purple-500/50 px-3 py-2 rounded-lg transition-all"
                     title="Download Report">

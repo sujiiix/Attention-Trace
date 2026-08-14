@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { Eye, EyeOff, Wand2 } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -30,7 +31,7 @@ function Auth() {
   const handleGoogleSuccess = async (credentialResponse) => {
     setError(''); setMessage('');
     try {
-      const response = await fetch('http://localhost:8000/api/auth/google', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: credentialResponse.credential })
@@ -70,7 +71,7 @@ function Auth() {
     
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/password-reset/request`, {
+      const response = await fetch(`${API_BASE_URL}/api/password-reset/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -98,7 +99,7 @@ function Auth() {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/password-reset/confirm`, {
+      const response = await fetch(`${API_BASE_URL}/api/password-reset/confirm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, new_password: password })
@@ -129,7 +130,7 @@ function Auth() {
     if (isLogin) {
       // LOGIN FLOW
       try {
-        const response = await fetch(`http://localhost:8000/api/login`, {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier, password })
@@ -151,7 +152,7 @@ function Auth() {
       if (showOtpInput) {
         // VERIFY OTP
         try {
-          const response = await fetch(`http://localhost:8000/api/signup/verify-otp`, {
+          const response = await fetch(`${API_BASE_URL}/api/signup/verify-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, username, email, password, otp })
@@ -180,7 +181,7 @@ function Auth() {
         
         setLoading(true);
         try {
-          const response = await fetch(`http://localhost:8000/api/signup/request-otp`, {
+          const response = await fetch(`${API_BASE_URL}/api/signup/request-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, username, email, password })

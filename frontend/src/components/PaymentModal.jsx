@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { X, QrCode, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useToast } from './Toast';
+import { API_BASE_URL } from '../config';
 
-export default function PaymentModal({ isOpen, onClose, price, onSuccess }) {
+export default function PaymentModal({ isOpen, onClose, price, onSuccess, endpoint }) {
   const toast = useToast();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,8 @@ export default function PaymentModal({ isOpen, onClose, price, onSuccess }) {
     
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/subscription/activate', {
+      const apiUrl = endpoint || `${API_BASE_URL}/api/subscription/activate`;
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

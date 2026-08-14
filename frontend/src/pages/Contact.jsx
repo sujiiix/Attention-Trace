@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Phone, MapPin, Sparkles } from 'lucide-react';
 import { useToast } from '../components/Toast';
+import { API_BASE_URL } from '../config';
 
 function Contact() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function Contact() {
     setStatus({ type: '', msg: '' });
 
     try {
-      const response = await fetch('http://localhost:8000/api/contact', {
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

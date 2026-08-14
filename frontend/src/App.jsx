@@ -9,7 +9,8 @@ import Contact from './pages/Contact';
 import AdminPanel from './pages/AdminPanel';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Subscription from './pages/Subscription';
-import { User, Shield, LogOut, FileText, ChevronDown, Crown } from 'lucide-react';
+import { User, Shield, LogOut, FileText, ChevronDown, Crown, Sun, Moon } from 'lucide-react';
+import { API_BASE_URL } from './config';
 
 function ProfileDropdown({ user, isAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,21 @@ function ProfileDropdown({ user, isAdmin, onLogout }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const initials = user?.name
     ? user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
@@ -87,6 +103,15 @@ function ProfileDropdown({ user, isAdmin, onLogout }) {
               <FileText size={16} className="text-gray-500 group-hover:text-gray-300" />
               Privacy Policy
             </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); toggleTheme(); }}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                {theme === 'dark' ? <Sun size={16} className="text-yellow-400 group-hover:text-yellow-300" /> : <Moon size={16} className="text-blue-400 group-hover:text-blue-300" />}
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </div>
+            </button>
           </div>
 
           {/* Logout */}
@@ -115,7 +140,7 @@ function Navbar() {
 
   useEffect(() => {
     if (userId) {
-      fetch('http://localhost:8000/api/users/me', {
+      fetch(`${API_BASE_URL}/api/users/me`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
       .then(res => {
@@ -201,9 +226,16 @@ function Navbar() {
 }
 
 function App() {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    }
+  }, []);
+
   return (
     <Router>
-      <div className="min-h-screen bg-darkBg flex flex-col">
+      <div className="min-h-screen bg-darkBg flex flex-col transition-colors duration-300">
         <Navbar />
         <main className="flex-grow">
           <Routes>

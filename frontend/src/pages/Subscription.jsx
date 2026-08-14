@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, Check, Crown, Rocket, Shield, BarChart3, Globe, Clock, Star, ArrowRight, Clock3 } from 'lucide-react';
+import { Zap, Check, Crown, Rocket, Shield, BarChart3, Globe, Clock, Star, ArrowRight, Clock3, RefreshCw } from 'lucide-react';
 import { useToast } from '../components/Toast';
 import PaymentModal from '../components/PaymentModal';
+import { API_BASE_URL } from '../config';
 
 export default function Subscription() {
   const navigate = useNavigate();
   const toast = useToast();
-  const [pricing, setPricing] = useState({ price: 500, free_campaign_limit: 1, currency: 'INR', period: 'month' });
+  const [pricing, setPricing] = useState({ price: 500, free_campaign_limit: 1, pro_campaign_limit: 20, currency: 'INR', period: 'month' });
   const [subStatus, setSubStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activating, setActivating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRenewModal, setIsRenewModal] = useState(false);
 
   const fetchStatus = async () => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/auth'); return; }
 
     Promise.all([
-      fetch('http://localhost:8000/api/subscription/pricing').then(r => r.json()),
-      fetch('http://localhost:8000/api/subscription/status', {
+      fetch(`${API_BASE_URL}/api/subscription/pricing`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/subscription/status`, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).then(r => r.json())
     ]).then(([pricingData, statusData]) => {
@@ -39,17 +41,23 @@ export default function Subscription() {
 
   const handlePaymentSuccess = () => {
     setIsModalOpen(false);
+    setIsRenewModal(false);
     fetchStatus();
+  };
+
+  const handleRenew = () => {
+    setIsRenewModal(true);
+    setIsModalOpen(true);
   };
   const handleCancel = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/subscription/cancel', {
+      const res = await fetch(`${API_BASE_URL}/api/subscription/cancel`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (res.ok) {
         toast.info('Subscription cancelled.');
-        const statusRes = await fetch('http://localhost:8000/api/subscription/status', {
+        const statusRes = await fetch(`${API_BASE_URL}/api/subscription/status`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         setSubStatus(await statusRes.json());
@@ -68,8 +76,9 @@ export default function Subscription() {
   }
 
   const isActive = subStatus?.is_subscribed;
+  const isExpired = subStatus?.status === 'expired' || subStatus?.status === 'cancelled';
   const features = [
-    { icon: <Rocket size={18} />, text: 'Unlimited Campaigns', free: false },
+    { icon: <Rocket size={18} />, text: `Up to ${pricing.pro_campaign_limit} Campaigns`, free: false },
     { icon: <BarChart3 size={18} />, text: 'Full Analytics Dashboard', free: true },
     { icon: <Globe size={18} />, text: 'Real-time Emotion Detection', free: true },
     { icon: <Shield size={18} />, text: 'Priority Support', free: false },
@@ -88,7 +97,7 @@ export default function Subscription() {
           Choose Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-accentOrange to-yellow-400">Plan</span>
         </h1>
         <p className="text-gray-400 max-w-xl mx-auto text-lg">
-          Start free with {pricing.free_campaign_limit} campaign. Upgrade to unlock unlimited campaigns and premium features.
+          Start free with {pricing.free_campaign_limit} campaign. Upgrade to get up to {pricing.pro_campaign_limit} campaigns and premium features.
         </p>
       </div>
 
@@ -106,11 +115,42 @@ export default function Subscription() {
               </p>
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={handleRenew}
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-accentOrange to-yellow-500 text-white text-sm font-bold transition-all hover:shadow-lg hover:shadow-orange-500/30 flex items-center gap-2"
+            >
+              <RefreshCw size={14} /> Renew Plan
+            </button>
+            <button 
+              onClick={handleCancel}
+              className="px-5 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm font-semibold transition-all"
+            >
+              Cancel Subscription
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Expired / Cancelled Banner */}
+      {isExpired && (
+        <div className="mb-12 p-6 rounded-2xl bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
+              <Clock3 size={24} className="text-red-400" />
+            </div>
+            <div>
+              <p className="text-red-300 font-bold text-lg">Subscription {subStatus?.status === 'cancelled' ? 'Cancelled' : 'Expired'}</p>
+              <p className="text-red-400/60 text-sm">
+                Your Pro plan has {subStatus?.status === 'cancelled' ? 'been cancelled' : 'expired'}. Renew now to continue creating campaigns and keep your ads running.
+              </p>
+            </div>
+          </div>
           <button 
-            onClick={handleCancel}
-            className="px-5 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm font-semibold transition-all"
+            onClick={handleRenew}
+            className="px-5 py-3 rounded-lg bg-gradient-to-r from-accentOrange to-yellow-500 text-white text-sm font-bold transition-all hover:shadow-lg hover:shadow-orange-500/30 flex items-center gap-2 flex-shrink-0"
           >
-            Cancel Subscription
+            <RefreshCw size={14} /> Renew Now
           </button>
         </div>
       )}
@@ -186,12 +226,6 @@ export default function Subscription() {
           </div>
 
           <div className="space-y-4 mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-accentOrange/20 flex items-center justify-center flex-shrink-0">
-                <Check size={12} className="text-accentOrange" />
-              </div>
-              <span className="text-white text-sm font-semibold">Unlimited Campaigns</span>
-            </div>
             {features.map((f, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full bg-accentOrange/20 flex items-center justify-center flex-shrink-0">
@@ -232,7 +266,7 @@ export default function Subscription() {
               <p className="text-gray-500 text-xs uppercase tracking-wider mt-1">Campaigns</p>
             </div>
             <div>
-              <p className="text-3xl font-black text-white">{isActive ? '∞' : subStatus.free_campaign_limit}</p>
+              <p className="text-3xl font-black text-white">{isActive ? pricing.pro_campaign_limit : subStatus.free_campaign_limit}</p>
               <p className="text-gray-500 text-xs uppercase tracking-wider mt-1">Limit</p>
             </div>
             <div>
@@ -252,9 +286,10 @@ export default function Subscription() {
 
       <PaymentModal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={() => { setIsModalOpen(false); setIsRenewModal(false); }} 
         price={pricing.price} 
-        onSuccess={handlePaymentSuccess} 
+        onSuccess={handlePaymentSuccess}
+        endpoint={isRenewModal ? `${API_BASE_URL}/api/subscription/renew` : undefined}
       />
     </div>
   );

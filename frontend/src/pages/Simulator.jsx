@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
+import { API_BASE_URL } from '../config';
 
 function Simulator() {
   const { campaignId } = useParams();
@@ -44,7 +45,9 @@ function Simulator() {
   // ---- WEBCAM: start only when ad is visible ----
   const startWebcam = useCallback(() => {
     try {
-      wsRef.current = new WebSocket('ws://localhost:8000/ws/emotion');
+      const wsProtocol = API_BASE_URL.startsWith('https') ? 'wss' : 'ws';
+      const wsHost = API_BASE_URL.replace(/^https?:\/\//, '');
+      wsRef.current = new WebSocket(`${wsProtocol}://${wsHost}/ws/emotion`);
       wsRef.current.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -93,9 +96,8 @@ function Simulator() {
     setWebcamActive(false);
   }, []);
 
-  // ---- Fetch campaign + set ad timers ----
   useEffect(() => {
-    fetch(`http://localhost:8000/api/campaign/${campaignId}/media`)
+    fetch(`${API_BASE_URL}/api/campaign/${campaignId}/media`)
       .then(r => {
         if (!r.ok) throw new Error('Campaign not found');
         return r.json();
@@ -151,7 +153,7 @@ function Simulator() {
     const activeTime = Math.max(0, timeSpent - idleTime.current);
 
     try {
-      await fetch('http://localhost:8000/api/sessions', {
+      await fetch(`${API_BASE_URL}/api/sessions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
