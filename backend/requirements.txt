@@ -3,7 +3,7 @@ uvicorn==0.28.0
 pymongo[srv]==4.6.2
 pydantic==2.6.4
 fer==22.5.1
-mediapipe==0.10.11
+mediapipe==0.10.35
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
 python-jose[cryptography]==3.3.0
