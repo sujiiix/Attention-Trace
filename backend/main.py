@@ -68,7 +68,7 @@ try:
         options = vision.FaceLandmarkerOptions(
             base_options=base_options,
             output_face_blendshapes=True,
-            output_face_transformation_matrixes=True,
+            output_facial_transformation_matrixes=True,
             num_faces=1)
         face_landmarker = vision.FaceLandmarker.create_from_options(options)
         print("MediaPipe FaceLandmarker initialized.")
